@@ -1,0 +1,5 @@
+/dcross_DAM/config_vars_ignored.py
+/dcross_celery/
+/db.sqlite3
+/Pipfile.lock
+/Pipfile
