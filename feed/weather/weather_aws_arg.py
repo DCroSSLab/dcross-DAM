@@ -1,3 +1,11 @@
+"""
+Project Name: 	DCroSS
+Author List: 	Faraaz Biyabani
+Filename: 		weather_aws_arg.py
+Description: 	Extracts weather data from IMD's AWs-ARG Network website (dataonmap)
+"""
+
+
 from datetime import datetime, timedelta
 from pprint import pprint
 

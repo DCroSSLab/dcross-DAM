@@ -1,6 +1,12 @@
 import json
 from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
+"""
+This was for testing whether we are able to create periodic tasks from a pre-configured
+periodic task, we would call the below function from the pre-configured periodic
+task.
+"""
+
 
 def operation_add_factory():
     x = input("Input x: ")
@@ -17,4 +23,4 @@ def operation_add_factory():
     )
 
 
-operation_add_factory()
+# operation_add_factory()

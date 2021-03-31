@@ -1,3 +1,11 @@
+"""
+Project Name: 	DCroSS
+Author List: 	Faraaz Biyabani
+Filename: 		earthquake_ncs.py
+Description: 	Extracts earthquakes from NCS website
+"""
+
+
 import datetime
 import json
 import re
@@ -6,7 +14,6 @@ import pytz
 import requests
 from bs4 import BeautifulSoup
 from bson.json_util import loads
-from dcross_DAM.database import DBClient
 
 NCS_MIN_IMPACT_MAGNITUDE = 5.5
 
@@ -14,7 +21,7 @@ NCS_MIN_IMPACT_MAGNITUDE = 5.5
 class NCSEarthquakesFeed:
     def __init__(self, client):
         self.conn = client
-        self.disasters = client.events.disasters
+        self.earthquakes = client.events.earthquakes
         # self.earthquakes = client.events.earthquakes
         # self.hello = "hello"
 
@@ -62,11 +69,11 @@ class NCSEarthquakesFeed:
         return earthquakes
 
     def record_ncs_earthquakes(self, earthquakes):
-        disasters = self.disasters
+        earthquakes_db = self.earthquakes
         indian = pytz.timezone('Asia/Kolkata')
         for earthquake in earthquakes:
             event_id = earthquake['event_id']
-            exists = disasters.find_one({'properties.ncs_id': event_id})
+            exists = earthquakes_db.find_one({'properties.ncs_id': event_id})
             if exists:
                 print(event_id + "exists")
                 continue
@@ -86,7 +93,7 @@ class NCSEarthquakesFeed:
                          properties=dict(disaster_type="earthquake", time=time, name=name,
                                          magnitude=float(magnitude), depth=dict(value=depth, unit="km"),
                                          total_reports=0, reports=[], source="NCS", ncs_id=event_id))
-            disasters.insert_one(event)
+            earthquakes_db.insert_one(event)
 
 
 # feed = NCSEarthquakesFeed(DBClient())

@@ -1,17 +1,32 @@
-from pprint import pprint
+"""
+Project Name: 	DCroSS
+Author List: 	Saumyaranjan Parida
+Filename: 		mentions.py
+Description: 	Gets and stores tweets in which the bot is mentioned using tweepy
+"""
 
+
+from pprint import pprint
 from dcross_DAM.config_vars import TWITTER_BOT_USERNAME
-from dcross_DAM.database import DBClient
-from twitter_client import api
-db_client = DBClient()
+from .database_twitter import TwitterDatabase
+from .twitter_client import api
+
+"""
+User management is not done, like it is done for Telegram.
+Every new user is given a unique reporter_id, this identity is then present in
+all reports of this user.
+"""
+
+db_client = TwitterDatabase()
 
 
 def get_mentions():
     try:
-        mentions = api.mentions_timeline(since_id=1376131989841932288, tweet_mode="extended")
+        mentions = api.mentions_timeline(since_id=db_client.get_since_id(), tweet_mode="extended")
+        since_id = mentions[0].id
+        db_client.update_since_id(since_id)
         for status in mentions:
             images = []
-            pprint(status)
             description = status.full_text
             if TWITTER_BOT_USERNAME in status.full_text:
                 description = status.full_text.replace(TWITTER_BOT_USERNAME, "")
@@ -26,6 +41,3 @@ def get_mentions():
     except Exception as e:
         print(e)
         return
-
-
-get_mentions()

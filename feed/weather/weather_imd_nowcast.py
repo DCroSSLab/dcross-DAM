@@ -1,3 +1,11 @@
+"""
+Project Name: 	DCroSS
+Author List: 	Faraaz Biyabani
+Filename: 		weather_imd_nowcast.py
+Description: 	Extracts nowcasts from IMD's Mausam website
+"""
+
+
 import ast
 import datetime
 import json
@@ -11,6 +19,7 @@ from dcross_DAM.database import DBClient
 
 def extract_datetime(forecast):
     # cleaning forecast.description and extracting datetime
+    # Fixing the escapes...
     forecast["description"] = re.sub(r"\\/", "/", forecast["description"])
     # extracting date and times
     date = re.search("[0-9]{4}-[0-9]{2}-[0-9]{2}", forecast['description']).group()

@@ -27,7 +27,7 @@ SECRET_KEY = config_vars.DJANGO_SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["http://localhost:3001", "http://localhost:3000"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'dcross_celery.django_config.DcrossCeleryConfig',
     'django_celery_beat',
     'feed.apps.FeedConfig'
 ]

@@ -1,3 +1,10 @@
+"""
+Project Name: 	DCroSS
+Author List: 	Faraaz Biyabani
+Filename: 		celery.py
+Description: 	Celery app instance is initialized here
+"""
+
 import os
 from celery import Celery
 from celery.schedules import crontab
@@ -8,8 +15,10 @@ tasker = Celery('dcross_DAM')
 
 tasker.config_from_object("django.conf:settings", namespace="CELERY")
 
+tasker.autodiscover_tasks()
 
 # Pre-configured recurring tasks
+
 tasker.conf.beat_schedule = {
     'earthquake_ncs': {
         'task': 'feed.tasks.earthquake_ncs',
@@ -22,10 +31,12 @@ tasker.conf.beat_schedule = {
     'weather_aws_arg': {
         'task': 'feed.tasks.weather_aws_arg',
         'schedule': crontab(minute="*/15")
-    }
+    },
+    'twitter_mentions': {
+        'task': 'feed.tasks.twitter_mentions',
+        'schedule': crontab(minute="*/2")
+    },
 }
-
-tasker.autodiscover_tasks()
 
 
 @tasker.task(bind=True)
